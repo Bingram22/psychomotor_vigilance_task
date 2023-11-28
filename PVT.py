@@ -8,7 +8,8 @@ If you publish work using this script the most relevant publication is:
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
         PsychoPy2: Experiments in behavior made easy Behav Res 51: 195. 
         https://doi.org/10.3758/s13428-018-01193-y
-
+		
+	Edited by Ingram B.T. Dec 2023
 """
 
 from __future__ import absolute_import, division
@@ -28,7 +29,8 @@ import sys  # to get file system encoding
 
 from psychopy.hardware import keyboard
 
-
+import json
+from datetime import datetime
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -46,19 +48,42 @@ expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-subject_directory = os.path.abspath(os.path.join(_thisDir, "../")) + os.sep + f'results/sub-{expInfo["participant"]}/ses-{expInfo["session"]}/'
+subject_directory = os.path.abspath(os.path.join(_thisDir, "../../")) + os.sep + f'results/sub-{expInfo["participant"]}/ses-{expInfo["session"]}/beh/'
 if not os.path.exists(subject_directory):
     os.makedirs(subject_directory)
     
-filename = f'sub-{expInfo["participant"]}_ses-{expInfo["session"]}_task-pvt'
+filename = f'sub-{expInfo["participant"]}_ses-{expInfo["session"]}_task-pvt_beh'
 output_path = f'{subject_directory}{filename}'
-print(f'OUTPUT PATH: {output_path}')
+
+# Create JSON Metadata file
+
+# datetime object containing current date and time
+now = datetime.now()
+ 
+print("now =", now)
+
+# dd/mm/YY H:M:S
+dt_string = now.strftime("%Y-%m-%dT%H-%M-%S")
+
+metadata = {'TaskName' : 'Psychomotor Vigilance Task',
+			'DateTime' : dt_string}
+
+
+# Serializing json
+json_object = json.dumps(metadata, indent=4)
+
+# Writing to sample.json
+with open(output_path+'.json', "w") as outfile:
+    outfile.write(json_object)
+#json_filename = f''
+
+
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
     originPath='/Users/u1984094/Documents/submarine/psychomotor_vigilance_task/PVT_lastrun.py',
     savePickle=True, saveWideText=True,
-    dataFileName=output_path)
+    dataFileName=output_path+'.log')
 # save a log file for detail verbose info
 logFile = logging.LogFile(output_path + '.log', level=logging.EXP)
 logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
@@ -76,6 +101,9 @@ win = visual.Window(
     blendMode='avg', useFBO=True, 
     units='height')
 # store frame rate of monitor if we can measure it
+
+
+
 expInfo['frameRate'] = win.getActualFrameRate()
 if expInfo['frameRate'] != None:
     frameDur = 1.0 / round(expInfo['frameRate'])
@@ -116,7 +144,7 @@ feed = 0.5
 timing = core.Clock()
 
 # Loading the beep sound
-warning_beep = sound.Sound('beep.wav')
+#warning_beep = sound.Sound('beep.wav') # THIS BEEP IS THE ISSUE
 
 ISI_text = visual.TextStim(win=win, name='ISI_text',
     text=None,
