@@ -75,15 +75,13 @@ json_object = json.dumps(metadata, indent=4)
 # Writing to sample.json
 with open(output_path+'.json', "w") as outfile:
     outfile.write(json_object)
-#json_filename = f''
-
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
     originPath='/Users/u1984094/Documents/submarine/psychomotor_vigilance_task/PVT_lastrun.py',
     savePickle=True, saveWideText=True,
-    dataFileName=output_path+'.log')
+    dataFileName=output_path)
 # save a log file for detail verbose info
 logFile = logging.LogFile(output_path + '.log', level=logging.EXP)
 logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
@@ -101,7 +99,6 @@ win = visual.Window(
     blendMode='avg', useFBO=True, 
     units='height')
 # store frame rate of monitor if we can measure it
-
 
 
 expInfo['frameRate'] = win.getActualFrameRate()
@@ -216,6 +213,7 @@ InstructionsClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 
 # -------Run Routine "Instructions"-------
+win.setMouseVisible(False)
 while continueRoutine:
     # get current time
     t = InstructionsClock.getTime()
@@ -348,6 +346,7 @@ for thisPVT_Trial in PVT_Trials:
     frameN = -1
     
     # -------Run Routine "ISI"-------
+    win.setMouseVisible(False)
     while continueRoutine:
         # get current time
         t = ISIClock.getTime()
